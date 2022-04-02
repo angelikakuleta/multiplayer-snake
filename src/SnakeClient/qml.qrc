@@ -1,0 +1,8 @@
+<RCC>
+    <qresource prefix="/">
+        <file>main.qml</file>
+        <file>View/GameButton.qml</file>
+        <file>View/MainWindow.qml</file>
+        <file>View/GameRoomWindow.qml</file>
+    </qresource>
+</RCC>

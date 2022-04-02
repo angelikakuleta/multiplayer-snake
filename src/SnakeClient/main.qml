@@ -1,8 +1,14 @@
 import QtQuick
 
 Window {
-    width: 640
-    height: 480
+    width: 1280
+    height: 720
     visible: true
-    title: qsTr("Hello World")
+    title: qsTr("SnakeClient")
+
+    Loader {
+        id: mainLoader
+        anchors.fill: parent
+        source: "qrc:/View/MainWindow.qml"
+    }
 }
