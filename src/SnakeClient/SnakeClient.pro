@@ -1,6 +1,8 @@
 QT += quick
 
 SOURCES += \
+        ViewModel/gameboardvm.cpp \
+        gameboard.cpp \
         main.cpp
 
 resources.files = main.qml 
@@ -17,3 +19,7 @@ QML_DESIGNER_IMPORT_PATH =
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+HEADERS += \
+    ViewModel/gameboardvm.h \
+    gameboard.h

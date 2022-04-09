@@ -1,12 +1,37 @@
 import QtQuick 2.0
+import QtQuick.Window
 
 Item {
     id: roomWindow
+
+    focus: true
+    Keys.onPressed: (event) => {
+        switch (event.key) {
+            case Qt.Key_Up:
+                console.log("Key Up was pressed")
+                break;
+            case Qt.Key_Down:
+                console.log("Key Down was pressed")
+                break;
+            case Qt.Key_Left:
+                console.log("Key Left was pressed")
+                break;
+            case Qt.Key_Right:
+                console.log("Key Right was pressed")
+                break;
+            default:
+                break;
+        }
+    }
 
     Rectangle {
         id: background
         anchors.fill: parent
         color: "#252526"
+    }
+
+    GameBoard {
+        id: gameBoard
     }
 
     Text {
@@ -72,5 +97,6 @@ Item {
 
         buttonColor: "#D73964"
         buttonText: "Leave"
+        onButtonClicked: mainLoader.source = "qrc:/View/MainWindow.qml"
     }
 }
