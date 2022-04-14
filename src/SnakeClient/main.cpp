@@ -1,6 +1,7 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
+#include "clientmanager.h"
 #include "gameboard.h"
 #include <ViewModel/gameboardvm.h>
 
@@ -16,6 +17,8 @@ int main(int argc, char *argv[])
     auto boardVM = new GameBoardVM(&board);
 
     engine.rootContext()->setContextProperty("GameBoardVM", boardVM);
+
+    ClientManager clientManager;
 
     engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
     if (engine.rootObjects().isEmpty()) { return -1; }
