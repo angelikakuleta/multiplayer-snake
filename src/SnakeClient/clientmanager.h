@@ -2,6 +2,7 @@
 #define CLIENTMANAGER_H
 
 #include "gameboard.h"
+#include "messageparser.h"
 #include "socketclient.h"
 #include <QObject>
 
@@ -21,10 +22,14 @@ public:
     GameBoard *board() const { return m_board; };
     void setBoard(GameBoard *newBoard) { m_board = newBoard; }
 
+public slots:
+    void onNewMessageReceived(QByteArray message);
+
 private:
     explicit ClientManager(QObject *parent = nullptr);
 
     SocketClient* m_client;
+    MessageParser* m_messageParser;
     GameBoard* m_board;
 };
 

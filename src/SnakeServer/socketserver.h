@@ -31,7 +31,13 @@ signals:
      * @brief Emitted every time a new message has received.
      * @param message
      */
-    void newMessageReceived(QByteArray message);
+    void onNewMessageReceived(QByteArray message);
+
+    /**
+     * @brief Emitted every time a new client connected.
+     * @param clientId client ID
+     */
+    void clientConnected(qint16 clientId);
 
 public slots:
     /**

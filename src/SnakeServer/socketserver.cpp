@@ -6,9 +6,6 @@
 
 const qint16 PORT = 8080;
 
-const char BREAK_CHAR = '#';
-const char* C_CLIENET_ID = "CID";
-
 SocketServer::SocketServer(QObject *parent)
     : QTcpServer(parent)
 {
@@ -48,13 +45,8 @@ void SocketServer::onNewConnection()
 
     m_clients[clientId] = newClient;
 
-    QByteArray message;
-    message.append(C_CLIENET_ID)
-        .append(BREAK_CHAR)
-        .append(QByteArray::number(clientId));
-    newClient->write(message);
-
     qDebug() << "New client connected";
+    emit clientConnected(clientId);
 }
 
 void SocketServer::onReadyRead()
@@ -63,7 +55,7 @@ void SocketServer::onReadyRead()
     QByteArray message = sender->readAll();
 
     qDebug() << "Received new client message" << message;
-    emit newMessageReceived(message);
+    emit onNewMessageReceived(message);
 }
 
 void SocketServer::onDisconected()

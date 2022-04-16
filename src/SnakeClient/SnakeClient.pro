@@ -6,6 +6,7 @@ SOURCES += \
         clientmanager.cpp \
         gameboard.cpp \
         main.cpp \
+        messageparser.cpp \
         socketclient.cpp
 
 resources.files = main.qml 
@@ -28,4 +29,5 @@ HEADERS += \
     ViewModel/gameclientvm.h \
     clientmanager.h \
     gameboard.h \
+    messageparser.h \
     socketclient.h

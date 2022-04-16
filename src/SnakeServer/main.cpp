@@ -1,11 +1,11 @@
-#include "socketserver.h"
+#include "gamemanager.h"
 #include <QCoreApplication>
 
 int main(int argc, char *argv[])
 {
     QCoreApplication a(argc, argv);
 
-    SocketServer server;
+    GameManager gameManager;
 
     return a.exec();
 }
