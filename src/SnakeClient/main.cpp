@@ -1,24 +1,19 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
-#include <QQmlContext>
-#include "clientmanager.h"
-#include "gameboard.h"
 #include <ViewModel/gameboardvm.h>
-
+#include <ViewModel/gameclientvm.h>
 
 int main(int argc, char *argv[])
 {
     QGuiApplication app(argc, argv);
     QQmlApplicationEngine engine;
 
-    qmlRegisterUncreatableType<GameBoard>("GameBoard.Tile", 1, 0, "Tile", "Type of tile on the game board");
+    ClientManager::instance();
 
-    auto board = GameBoard();
-    auto boardVM = new GameBoardVM(&board);
+    qmlRegisterSingletonType<GameClientVM>("Snake.GameClient", 1, 0, "GameClient", &GameClientVM::qmlInstance);
+    qmlRegisterType<GameBoardVM>("Snake.GameBoard", 1, 0, "GameBoard");
 
-    engine.rootContext()->setContextProperty("GameBoardVM", boardVM);
-
-    ClientManager clientManager;
+    qmlRegisterUncreatableType<GameBoard>("Snake.GameBoard.Tile", 1, 0, "Tile", "Type of tile on the game board");
 
     engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
     if (engine.rootObjects().isEmpty()) { return -1; }

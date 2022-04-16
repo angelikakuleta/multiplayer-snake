@@ -56,6 +56,19 @@ public slots:
      */
     void onError(QAbstractSocket::SocketError error);
 
+signals:
+    /**
+     * @brief Emitted every time a new message has received.
+     * @param message
+     */
+    void newMessageReceived(QByteArray message);
+
+    /**
+     * @brief Emitted every time an error message has received.
+     * @param errMessage error message
+     */
+    void errorMessage(QString errMessage);
+
 private:
     /**
      * @brief The client ID

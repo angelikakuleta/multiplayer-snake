@@ -1,12 +1,10 @@
 #include "gameboardvm.h"
+#include "clientmanager.h"
 
-GameBoardVM::GameBoardVM(const GameBoard *board, QObject *parent)
+GameBoardVM::GameBoardVM(QObject *parent)
     : QAbstractListModel{parent}
-    , m_board(board)
 {
-    connect(m_board, &GameBoard::dataChanged, this, [=](const GameBoard::Pos &from, const GameBoard::Pos &to){
-        emit dataChanged(createIndex(from.row, from.column), createIndex(to.row, to.column), {Qt::DisplayRole});
-    });
+    setBoard(ClientManager::instance().board());
 }
 
 int GameBoardVM::rowCount(const QModelIndex&) const
@@ -35,5 +33,23 @@ QVariant GameBoardVM::data(const QModelIndex &index, int role) const
     return QVariant::fromValue(m_board->tiles({
                 static_cast<uint>(index.row()),
                 static_cast<uint>(index.column())
-            }));
+                                              }));
+}
+
+void GameBoardVM::setBoard(const GameBoard *newBoard)
+{
+    beginResetModel();
+
+    if(m_board && m_signalConnected)
+        m_board->disconnect(this);
+
+    m_board = newBoard;
+
+    connect(m_board, &GameBoard::dataChanged, this, [=](const GameBoard::Pos &from, const GameBoard::Pos &to){
+        emit dataChanged(createIndex(from.row, from.column), createIndex(to.row, to.column), {Qt::DisplayRole});
+    });
+
+    m_signalConnected = true;
+
+    endResetModel();
 }

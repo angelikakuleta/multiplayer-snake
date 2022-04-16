@@ -1,5 +1,8 @@
 #include "socketclient.h"
 
+const char* DEFAULT_ADDRESS = "127.0.0.1";
+const qint16 DEFAULT_PORT = 8080;
+
 SocketClient::SocketClient(QObject *parent)
     : QTcpSocket{parent}
     , m_clientId(-1)
@@ -19,6 +22,8 @@ void SocketClient::onReadyRead()
 {
     QByteArray message = readAll();
     qDebug() << "Received message" << message;
+
+    emit newMessageReceived(message);
 }
 
 void SocketClient::onError(QAbstractSocket::SocketError error)
@@ -43,9 +48,13 @@ void SocketClient::onError(QAbstractSocket::SocketError error)
     }
 
     qDebug() << "Received error" << errMessage;
+    emit errorMessage(errMessage);
 }
 
 void SocketClient::connectToServer(QString address, qint16 port)
 {
+    if (address.length() == 0) address = DEFAULT_ADDRESS;
+    if (port == 0) port = DEFAULT_PORT;
+
     connectToHost(QHostAddress(address), port);
 }

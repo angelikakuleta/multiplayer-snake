@@ -2,6 +2,7 @@ QT += quick
 
 SOURCES += \
         ViewModel/gameboardvm.cpp \
+        ViewModel/gameclientvm.cpp \
         clientmanager.cpp \
         gameboard.cpp \
         main.cpp \
@@ -24,6 +25,7 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 HEADERS += \
     ViewModel/gameboardvm.h \
+    ViewModel/gameclientvm.h \
     clientmanager.h \
     gameboard.h \
     socketclient.h

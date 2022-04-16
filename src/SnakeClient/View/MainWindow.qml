@@ -1,7 +1,20 @@
 import QtQuick 2.0
+import Snake.GameClient 1.0
 
 Item {
     id: mainWindow
+
+    Connections {
+        target: GameClient
+        function onConnected() {
+            mainLoader.source = "qrc:/View/GameRoomWindow.qml"
+        }
+
+        function onErrorMessage(error) {
+            errorText.text = error
+            connectButton.isWaiting = false;
+        }
+    }
 
     Rectangle {
         id: background
@@ -31,9 +44,16 @@ Item {
             topMargin: 80
         }
 
+        property bool isWaiting: false;
         buttonColor: "#419388"
         buttonText: "Connect"
-        onButtonClicked: mainLoader.source = "qrc:/View/GameRoomWindow.qml"
+        onButtonClicked: {
+            if (!this.isWaiting) {
+                errorText.text = "Connecting...";
+                this.isWaiting = true;
+                GameClient.connectToServer();
+            }
+        }
     }
 
     GameButton {
@@ -48,4 +68,18 @@ Item {
         buttonText: "Quit"
         onButtonClicked: Qt.quit();
     }
+
+    Text {
+            id: errorText
+            font.pixelSize: 24
+            font.italic: true
+            anchors {
+                top: quitButton.bottom
+                left: quitButton.left
+                topMargin: 80
+            }
+
+            color: "#D73964"
+            text: ""
+        }
 }

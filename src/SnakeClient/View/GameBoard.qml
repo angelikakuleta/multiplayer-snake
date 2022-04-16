@@ -1,6 +1,7 @@
 import QtQuick 2.0
 import QtQuick.Window
-import GameBoard.Tile 1.0
+import Snake.GameBoard 1.0
+import Snake.GameBoard.Tile 1.0
 
 TableView {
     id: board
@@ -14,11 +15,13 @@ TableView {
         leftMargin: 40
     }
 
-    model: GameBoardVM
+    model: GameBoard {
+        id: boardmodel
+    }
 
     delegate: Rectangle {
-        implicitWidth: board.implicitWidth / GameBoardVM.columnCount()
-        implicitHeight: board.implicitHeight / GameBoardVM.rowCount()
+        implicitWidth: board.implicitWidth / boardmodel.columnCount()
+        implicitHeight: board.implicitHeight / boardmodel.rowCount()
         color: getColor(model.display)
 
         Text {
