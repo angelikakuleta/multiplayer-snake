@@ -1,5 +1,8 @@
 #include "clientmanager.h"
 
+using ClientCmd = Contract::ClientCmd;
+using ServerCmd = Contract::ServerCmd;
+
 ClientManager::ClientManager(QObject *parent)
     : QObject{parent}
 {
@@ -19,7 +22,7 @@ ClientManager::~ClientManager()
 
 void ClientManager::onNewMessageReceived(QByteArray message)
 {
-    Command cmd;
+    Contract::ServerCmd cmd;
     QList<QByteArray> params;
 
     bool isValid = false;
@@ -28,10 +31,10 @@ void ClientManager::onNewMessageReceived(QByteArray message)
     if (!isValid) return;
 
     switch (cmd) {
-    case Command::ClientRegistered:
+    case ServerCmd::ClientIdRegistered:
         if (params.length() == 0) return;
         qint16 newClientId = params.first().toInt(&isValid);
-            if (!isValid) return;
+        if (!isValid) return;
         m_client->setClientId(newClientId);
         break;
     }

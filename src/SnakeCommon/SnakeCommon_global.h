@@ -1,0 +1,12 @@
+#ifndef SNAKECOMMON_GLOBAL_H
+#define SNAKECOMMON_GLOBAL_H
+
+#include <QtCore/qglobal.h>
+
+#if defined(SNAKECOMMON_LIBRARY)
+#  define SNAKECOMMON_EXPORT Q_DECL_EXPORT
+#else
+#  define SNAKECOMMON_EXPORT Q_DECL_IMPORT
+#endif
+
+#endif // SNAKECOMMON_GLOBAL_H

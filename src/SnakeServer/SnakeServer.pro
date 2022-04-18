@@ -23,3 +23,10 @@ HEADERS += \
     gamemanager.h \
     messageparser.h \
     socketserver.h
+
+win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../SnakeCommon/release/ -lSnakeCommon
+else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/../SnakeCommon/debug/ -lSnakeCommon
+else:unix: LIBS += -L$$OUT_PWD/../SnakeCommon/ -lSnakeCommon
+
+INCLUDEPATH += $$PWD/../SnakeCommon
+DEPENDPATH += $$PWD/../SnakeCommon

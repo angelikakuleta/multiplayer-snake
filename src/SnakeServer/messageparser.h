@@ -2,11 +2,7 @@
 #define MESSAGEPARSER_H
 
 #include <QObject>
-
-enum Command {
-    ClientRegistered,
-    StartGame
-};
+#include <contract.h>
 
 /**
  * @brief The message parser
@@ -25,7 +21,7 @@ public:
      * @param [out] params parameters
      * @return true if message was parsed successfully, false otherwise
      */
-    bool parseMessage(const QByteArray message, Command &cmd, qint16 &sender, QList<QByteArray> &params);
+    bool parseMessage(const QByteArray message, Contract::ClientCmd &cmd, qint16 &sender, QList<QByteArray> &params);
 
     /**
      * @brief Builds a message based on the passed command and parameters
@@ -33,13 +29,7 @@ public:
      * @param params parameters
      * @return prepared message
      */
-    QByteArray buildMessage(const Command cmd, const QList<QByteArray> &params);
-
-private:
-    /**
-     * @brief Collection of commands and their codes
-     */
-    std::map<Command, char*> m_cmdCodes;
+    QByteArray buildMessage(const Contract::ServerCmd, const QList<QByteArray> &params);
 };
 
 #endif // MESSAGEPARSER_H

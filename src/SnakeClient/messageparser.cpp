@@ -1,19 +1,13 @@
 #include "messageparser.h"
 
-const char BREAK_CHAR = '#';
-const char* CMD_CLIENET_ID = "CID";
-const char* CMD_START_GAME = "SGM";
-
 MessageParser::MessageParser(QObject *parent)
     : QObject{parent}
 {
-    m_cmdCodes[Command::ClientRegistered] = (char *)CMD_CLIENET_ID;
-    m_cmdCodes[Command::StartGame] = (char *)CMD_START_GAME;
 }
 
-bool MessageParser::parseMessage(const QByteArray message, Command &cmd, QList<QByteArray> &params)
+bool MessageParser::parseMessage(const QByteArray message, Contract::ServerCmd &cmd, QList<QByteArray> &params)
 {
-    QList<QByteArray> separated = message.split(BREAK_CHAR);
+    QList<QByteArray> separated = message.split(Contract::breakChar());
 
     if (separated.length() < 1) return false;
 
@@ -21,7 +15,8 @@ bool MessageParser::parseMessage(const QByteArray message, Command &cmd, QList<Q
     separated.pop_front();
 
     bool isValid = false;
-    for (auto mapIterator = m_cmdCodes.begin(); mapIterator != m_cmdCodes.end(); mapIterator++) {
+    auto c = &Contract::serverCmdCodes();
+    for (auto mapIterator = c->begin(); mapIterator != c->end(); mapIterator++) {
         if (mapIterator->second == cmdCode) {
             cmd = mapIterator->first;
             isValid = true;
@@ -35,17 +30,17 @@ bool MessageParser::parseMessage(const QByteArray message, Command &cmd, QList<Q
     return true;
 }
 
-QByteArray MessageParser::buildMessage(const Command cmd,
+QByteArray MessageParser::buildMessage(const Contract::ClientCmd cmd,
                                        const qint16 clientId, const std::optional<QList<QByteArray>> &params)
 {
     QByteArray message;
-    message.append(m_cmdCodes[cmd])
-        .append(BREAK_CHAR)
+    message.append(Contract::clientCmdCodes().at(cmd))
+        .append(Contract::breakChar())
         .append(QByteArray::number(clientId));
 
     if (params.has_value()) {
         for (const auto &param : *params) {
-            message.append(BREAK_CHAR)
+            message.append(Contract::breakChar())
                     .append(param);
         }
     }
