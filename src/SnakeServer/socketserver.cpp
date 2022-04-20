@@ -68,7 +68,7 @@ void SocketServer::onReadyRead()
     for (auto &message : data.split(Contract::endChar())) {
         if (message.size() == 0) continue;
         qDebug() << "Received new client message" << message;
-        emit newMessageReceived(message);
+        emit onNewMessageReceived(message);
     }
 }
 

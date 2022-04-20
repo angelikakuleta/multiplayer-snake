@@ -12,7 +12,7 @@ GameManager::GameManager(QObject *parent)
             this, SLOT(onClientConnected(qint16)));
     connect(m_socketServer, SIGNAL(clientDisconnected(qint16)),
             this, SLOT(onClientDisconnected(qint16)));
-    connect(m_socketServer, SIGNAL(newMessageReceived(QByteArray)),
+    connect(m_socketServer, SIGNAL(onNewMessageReceived(QByteArray)),
             this, SLOT(onNewMessageReceived(QByteArray)));
 }
 
