@@ -11,11 +11,11 @@ GameBoard::GameBoard(QObject *parent)
     , m_tiles(m_rows*m_columns, Tile::Empty)
 {
     // to remove
-    m_tiles.at(0) = Tile::Snake;
-    m_tiles.at(BOARD_ROWS * BOARD_COLUMNS / 3) = Tile::Fruit;
+    m_tiles.at(0) = Tile::Snake1;
+    m_tiles.at(BOARD_ROWS * BOARD_COLUMNS / 3) = Tile::Food;
 }
 
-GameBoard::Tile GameBoard::tiles(const Pos &pos) const
+Tile GameBoard::tiles(const Pos &pos) const
 {
     try {
         return m_tiles.at(posToIndex(pos));

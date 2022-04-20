@@ -3,10 +3,12 @@ QT += quick
 SOURCES += \
         ViewModel/gameboardvm.cpp \
         ViewModel/gameclientvm.cpp \
+        ViewModel/playerlistvm.cpp \
         clientmanager.cpp \
         gameboard.cpp \
         main.cpp \
         messageparser.cpp \
+        player.cpp \
         socketclient.cpp
 
 resources.files = main.qml 
@@ -27,9 +29,11 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 HEADERS += \
     ViewModel/gameboardvm.h \
     ViewModel/gameclientvm.h \
+    ViewModel/playerlistvm.h \
     clientmanager.h \
     gameboard.h \
     messageparser.h \
+    player.h \
     socketclient.h
 
 win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../SnakeCommon/release/ -lSnakeCommon

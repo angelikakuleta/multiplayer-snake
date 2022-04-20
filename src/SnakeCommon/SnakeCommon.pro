@@ -10,11 +10,13 @@ CONFIG += c++17
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
-    contract.cpp
+    contract.cpp \
+    game.cpp
 
 HEADERS += \
     SnakeCommon_global.h \
-    contract.h
+    contract.h \
+    game.h
 
 # Default rules for deployment.
 unix {

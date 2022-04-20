@@ -21,13 +21,14 @@ public:
     void leaveRoomRequest(qint16 clientId, qint16 roomId);
     void readyToPlayRequest(qint16 clientId, qint16 roomId);
     void startGameRequest(qint16 clientId, qint16 roomId);
-    void changeDirectionRequest(qint16 clientId, qint16 roomId, GameEngine::Direction direction);
+    void changeDirectionRequest(qint16 clientId, qint16 roomId, Game::Direction direction);
 
     void roomListUpdated();
     void readyListUpdated(qint16 roomId);
 
 public slots:
     void onClientConnected(qint16 clientId);
+    void onClientDisconnected(qint16 clientId);
     void onNewMessageReceived(QByteArray message);
 
 private:

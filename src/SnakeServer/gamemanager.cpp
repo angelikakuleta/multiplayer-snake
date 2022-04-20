@@ -10,6 +10,8 @@ GameManager::GameManager(QObject *parent)
     m_messageParser = new MessageParser(this);
     connect(m_socketServer, SIGNAL(clientConnected(qint16)),
             this, SLOT(onClientConnected(qint16)));
+    connect(m_socketServer, SIGNAL(clientDisconnected(qint16)),
+            this, SLOT(onClientDisconnected(qint16)));
     connect(m_socketServer, SIGNAL(newMessageReceived(QByteArray)),
             this, SLOT(onNewMessageReceived(QByteArray)));
 }
@@ -72,11 +74,10 @@ void GameManager::joinRoomRequest(qint16 clientId, qint16 roomId)
 void GameManager::leaveRoomRequest(qint16 clientId, qint16 roomId)
 {
     if (m_rooms.find(roomId) == m_rooms.end()) return;
-    auto existingRoom = m_rooms[roomId];
-    existingRoom->removeClient(clientId);
+    m_rooms[roomId]->removeClient(clientId);
     m_clientInLobby.push_back(clientId);
 
-    if (existingRoom->clients().size() > 0)
+    if (m_rooms[roomId]->clients().size() > 0)
         readyListUpdated(roomId);
     else
         m_rooms.erase(roomId);
@@ -96,10 +97,9 @@ void GameManager::readyToPlayRequest(qint16 clientId, qint16 roomId)
 void GameManager::startGameRequest(qint16 clientId, qint16 roomId)
 {
     if (m_rooms.find(roomId) == m_rooms.end()) return;
-    auto existingRoom = m_rooms[roomId];
 
-    if (*existingRoom->clients().begin() != clientId) return;
-    existingRoom->startGame();
+    if (*m_rooms[roomId]->clients().begin() != clientId) return;
+    m_rooms[roomId]->startGame();
 
     roomListUpdated();
 }
@@ -107,9 +107,7 @@ void GameManager::startGameRequest(qint16 clientId, qint16 roomId)
 void GameManager::changeDirectionRequest(qint16 clientId, qint16 roomId, GameEngine::Direction direction)
 {
     if (m_rooms.find(roomId) == m_rooms.end()) return;
-    auto existingRoom = m_rooms[roomId];
-
-    existingRoom->game()->changeDirection(clientId, direction);
+    m_rooms[roomId]->game()->changeDirection(clientId, direction);
 }
 
 void GameManager::onClientConnected(qint16 clientId)
@@ -122,6 +120,21 @@ void GameManager::onClientConnected(qint16 clientId)
 
     m_socketServer->sendMessageToClient(message, clientId);
     roomListUpdated();
+}
+
+void GameManager::onClientDisconnected(qint16 clientId)
+{
+    utils::findAndRemove(m_clientInLobby, clientId);
+    if (auto roomId = findRoomByClient(clientId)) {
+        m_rooms[roomId]->removeClient(clientId);
+
+        if (m_rooms[roomId]->clients().size() > 0)
+            readyListUpdated(roomId);
+        else
+            m_rooms.erase(roomId);
+
+        roomListUpdated();
+    }
 }
 
 void GameManager::onNewMessageReceived(QByteArray message)

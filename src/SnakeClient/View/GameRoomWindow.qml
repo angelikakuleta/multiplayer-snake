@@ -1,6 +1,7 @@
 import QtQuick 2.0
 import QtQuick.Window
 import Snake.GameClient 1.0
+import Snake.Direction 1.0
 
 Item {
     id: roomWindow
@@ -33,6 +34,11 @@ Item {
 
     GameBoard {
         id: gameBoard
+
+        anchors {
+            topMargin: 40
+            leftMargin: 40
+        }
     }
 
     Text {
@@ -50,7 +56,7 @@ Item {
     }
 
     Rectangle {
-        id: players
+        id: playersRec
         width: 360
         height: 220
         anchors {
@@ -59,6 +65,10 @@ Item {
             topMargin: 40
         }
         color: "#3F3F46"
+
+        PlayerList {
+            id: players
+        }
     }
 
     Text {
@@ -67,8 +77,8 @@ Item {
         width: 360
         height: 184 - roomText.height
         anchors {
-            top: players.bottom
-            right: players.right
+            top: playersRec.bottom
+            right: playersRec.right
         }
         horizontalAlignment: TextInput.AlignHCenter
         verticalAlignment: TextInput.AlignVCenter
@@ -80,12 +90,20 @@ Item {
         id: readyButton
         anchors {
             top: clock.bottom
-            right: players.right
-            rightMargin: (players.width - readyButton.width)/2
+            right: playersRec.right
+            rightMargin: (playersRec.width - readyButton.width)/2
         }
 
+        property bool isClicked: false;
         buttonColor: "#419388"
         buttonText: "Ready"
+        onButtonClicked: {
+            if (!isClicked) {
+                this.isClicked = true;
+                readyButton.buttonColor = "#3F3F46"
+                GameClient.readyToPlay();
+            }
+        }
     }
 
     GameButton {

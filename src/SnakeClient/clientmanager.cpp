@@ -60,7 +60,7 @@ void ClientManager::readyToPlayRequest()
 {
     QList<QByteArray> params;
     params.append(QByteArray::number(m_roomId));
-    auto message = m_messageParser->buildMessage(ClientCmd::LeaveRoom, m_client->clientId(), params);
+    auto message = m_messageParser->buildMessage(ClientCmd::ReadyToPlay, m_client->clientId(), params);
     m_client->sendMessage(message);
 }
 
@@ -68,7 +68,7 @@ void ClientManager::startGameRequest()
 {
     QList<QByteArray> params;
     params.append(QByteArray::number(m_roomId));
-    auto message = m_messageParser->buildMessage(ClientCmd::LeaveRoom, m_client->clientId(), params);
+    auto message = m_messageParser->buildMessage(ClientCmd::StartGame, m_client->clientId(), params);
     m_client->sendMessage(message);
 }
 
@@ -115,8 +115,40 @@ void ClientManager::onNewMessageReceived(QByteArray message)
         }
         emit openRoomsChanged();
         break;
-    case ServerCmd::ReadyListUpdated:
+    case ServerCmd::ReadyListUpdated: {
+        if (params.length() < 2) return;
+
+        for (auto p : m_players)
+            delete p;
+        m_players.clear();
+
+        qint16 clientId;
+        Player* pl;
+        std::vector<qint16> clientList;
+        std::vector<qint16> readyClientList;
+
+        for (auto &client : params.first().split(',')) {
+            clientId = client.toInt(&isValid);
+            if (isValid) clientList.push_back(clientId);
+        }
+        params.pop_front();
+        for (auto &readyClient : params.first().split(',')) {
+            clientId = readyClient.toInt(&isValid);
+            if (isValid) readyClientList.push_back(clientId);
+        }
+
+        auto tile = static_cast<short>(Tile::Snake1);
+        for (auto &clientId : clientList) {
+            pl = new Player(clientId, static_cast<Tile>(tile));
+            if (std::find(readyClientList.begin(), readyClientList.end(), clientId) != readyClientList.end())
+                pl->setIsReady(true);
+            m_players.push_back(pl);
+            ++tile;
+        }
+
+        emit playersChanged();
         break;
+    }
     case ServerCmd::GameTick:
         break;
     case ServerCmd::GameWinner:

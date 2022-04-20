@@ -1,5 +1,6 @@
 #ifndef GAMEENGINE_H
 #define GAMEENGINE_H
+#include "game.h"
 
 #include <QObject>
 
@@ -9,14 +10,6 @@ class GameEngine : public QObject
 public:
     explicit GameEngine(QObject *parent = nullptr);
 
-    enum Direction {
-        None = 0,
-        Up,
-        Down,
-        Left,
-        Right
-    };
-
     static ushort maxPlayers() { return s_maxPlayers; }
     bool isRunning() const { return m_isRunning; };
 
@@ -24,7 +17,7 @@ public:
     void removePlayer(qint16 player);
     void startGame();
     void resetGame();
-    void changeDirection(qint16 player, Direction direction);
+    void changeDirection(qint16 player, Game::Direction direction);
     qint16 checkWinner();
 
 private:

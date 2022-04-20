@@ -1,7 +1,7 @@
 import QtQuick 2.0
 import QtQuick.Window
 import Snake.GameBoard 1.0
-import Snake.GameBoard.Tile 1.0
+import Snake.Tile 1.0
 
 TableView {
     id: board
@@ -11,8 +11,6 @@ TableView {
     implicitHeight: 640
     anchors {
         fill: parent
-        topMargin: 40
-        leftMargin: 40
     }
 
     model: GameBoard {
@@ -37,12 +35,15 @@ TableView {
 
     function getColor(tile) {
         switch(tile) {
-        case Tile.Snake: return "#F6BD60"
+        case Tile.Snake1: return "#F6BD60"
+        case Tile.Snake2: return "#F28482"
+        case Tile.Snake3: return "#419388"
+        case Tile.Snake4: return "white"
         default: return "#494D71"
         }
     }
 
     function isFood(tile) {
-        return tile === Tile.Fruit;
+        return tile === Tile.Food;
     }
 }

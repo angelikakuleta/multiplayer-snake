@@ -75,13 +75,19 @@ void SocketServer::onReadyRead()
 void SocketServer::onDisconected()
 {
     QTcpSocket* client = static_cast<QTcpSocket*>(QObject::sender());
+
     if (client) {
         for (auto mapIterator = m_clients.begin(); mapIterator != m_clients.end(); mapIterator++) {
-            if (mapIterator->second == client)
-                m_clients.erase(mapIterator->first);
+            if (mapIterator->second == client) {
+                qint16 clientId = mapIterator->first;
+                m_clients.erase(clientId);
+
+                emit clientDisconnected(clientId);
+                break;
+            }
         }
         client->deleteLater();
-    }
 
-    qDebug() << "Client disconnected";
+        qDebug() << "Client disconnected";
+    } 
 }

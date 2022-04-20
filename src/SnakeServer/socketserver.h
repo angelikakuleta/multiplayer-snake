@@ -47,6 +47,12 @@ signals:
      */
     void clientConnected(qint16 clientId);
 
+    /**
+     * @brief Emitted every time thr client disconnected
+     * @param clientId client ID
+     */
+    void clientDisconnected(qint16 clientId);
+
 public slots:
     /**
      * @brief This method is called when new client connects

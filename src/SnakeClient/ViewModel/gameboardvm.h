@@ -1,7 +1,6 @@
 #ifndef GAMEBOARDVM_H
 #define GAMEBOARDVM_H
 
-#include <qqml.h>
 #include <QAbstractListModel>
 #include <gameboard.h>
 

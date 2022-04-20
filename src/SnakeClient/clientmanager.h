@@ -3,9 +3,12 @@
 
 #include "gameboard.h"
 #include "messageparser.h"
+#include "player.h"
 #include "socketclient.h"
 #include <QObject>
 #include <set>
+
+using Direction = Game::Direction;
 
 class ClientManager : public QObject
 {
@@ -13,15 +16,6 @@ class ClientManager : public QObject
 
 public:  
     ~ClientManager();
-
-    enum Direction {
-        None = 0,
-        Up,
-        Down,
-        Left,
-        Right
-    };
-    Q_ENUM(Direction);
 
     static ClientManager& instance() {
         static ClientManager *instance = new ClientManager();
@@ -37,6 +31,7 @@ public:
     SocketClient *client() const { return m_client; }
     const std::list<qint16> &openRooms() const { return m_openRooms; }
     qint16 roomId() const { return m_roomId; }
+    const std::vector<Player*> &players() const { return  m_players; }
     GameBoard *board() const { return m_board; };
     void setBoard(GameBoard *newBoard) { m_board = newBoard; }
     const Direction &direction() const { return m_direction; }
@@ -50,6 +45,7 @@ signals:
     void connected();
     void enteredRoom();
     void openRoomsChanged();
+    void playersChanged();
 
 private:
     explicit ClientManager(QObject *parent = nullptr);
@@ -59,7 +55,8 @@ private:
 
     std::list<qint16> m_openRooms;
     qint16 m_roomId;
-    GameBoard* m_board;
+    std::vector<Player*> m_players;
+    GameBoard* m_board;  
     Direction m_direction;
 };
 

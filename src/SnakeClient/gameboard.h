@@ -3,19 +3,14 @@
 
 #include <QObject>
 #include <vector>
+#include <game.h>
+
+using Tile = Game::Tile;
 
 class GameBoard : public QObject
 {
     Q_OBJECT
 public:
-    enum class Tile
-    {
-        Empty = 0,
-        Snake,
-        Fruit
-    };
-    Q_ENUM(Tile)
-
     struct Pos { uint row, column; };
 
     explicit GameBoard(QObject *parent = nullptr);
