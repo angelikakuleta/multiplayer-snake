@@ -7,7 +7,7 @@ Item {
     Connections {
         target: GameClient
         function onConnected() {
-            mainLoader.source = "qrc:/View/GameRoomWindow.qml"
+            mainLoader.source = "qrc:/View/GameLobbyWindow.qml"
         }
 
         function onErrorMessage(error) {

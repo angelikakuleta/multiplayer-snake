@@ -1,4 +1,5 @@
 import QtQuick
+import Snake.GameClient 1.0
 
 Window {
     property int windowWidth: 1280
@@ -12,12 +13,17 @@ Window {
     minimumHeight: windowHeight
 
     visible: true
-    title: qsTr("SnakeClient")
+    title: "SnakeClient " + clientId()
 
     Loader {
         id: mainLoader
         anchors.fill: parent
         focus: true
         source: "qrc:/View/MainWindow.qml"
+    }
+
+    function clientId() {
+        return GameClient.clientId !== -1
+                ? "#" + GameClient.clientId : "";
     }
 }

@@ -1,5 +1,6 @@
 import QtQuick 2.0
 import QtQuick.Window
+import Snake.GameClient 1.0
 
 Item {
     id: roomWindow
@@ -45,7 +46,7 @@ Item {
             rightMargin: 40
         }
         color: "white"
-        text: "Room #9999";
+        text: "Room #" + GameClient.roomId;
     }
 
     Rectangle {
@@ -97,6 +98,9 @@ Item {
 
         buttonColor: "#D73964"
         buttonText: "Leave"
-        onButtonClicked: mainLoader.source = "qrc:/View/MainWindow.qml"
+        onButtonClicked: {
+            GameClient.leaveRoom();
+            mainLoader.source = "qrc:/View/GameLobbyWindow.qml";
+        }
     }
 }

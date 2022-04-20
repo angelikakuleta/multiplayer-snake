@@ -5,5 +5,6 @@
         <file>View/MainWindow.qml</file>
         <file>View/GameRoomWindow.qml</file>
         <file>View/GameBoard.qml</file>
+        <file>View/GameLobbyWindow.qml</file>
     </qresource>
 </RCC>
