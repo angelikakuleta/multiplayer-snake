@@ -1,6 +1,7 @@
 #include "socketserver.h"
 #include <stdlib.h>
 #include <time.h>
+#include <contract.h>
 #include <QDebug>
 #include <QString>
 
@@ -23,12 +24,22 @@ SocketServer::SocketServer(QObject *parent)
 
 void SocketServer::sendMessageToClient(QByteArray message, qint16 clientId)
 {
+    message.append(Contract::endChar());
     if (m_clients.find(clientId) != m_clients.end())
     {
         QTcpSocket* existingClient = m_clients[clientId];
         existingClient->write(message);
     }
 }
+
+void SocketServer::sendMessageToMultipleClients(QByteArray message, std::vector<qint16> clients)
+{
+    for (auto &clientId : clients)
+    {
+        sendMessageToClient(message, clientId);
+    }
+}
+
 
 void SocketServer::onNewConnection()
 {
@@ -52,10 +63,13 @@ void SocketServer::onNewConnection()
 void SocketServer::onReadyRead()
 {
     QTcpSocket* sender = static_cast<QTcpSocket*>(QObject::sender());
-    QByteArray message = sender->readAll();
+    QByteArray data = sender->readAll();
 
-    qDebug() << "Received new client message" << message;
-    emit onNewMessageReceived(message);
+    for (auto &message : data.split(Contract::endChar())) {
+        if (message.size() == 0) continue;
+        qDebug() << "Received new client message" << message;
+        emit newMessageReceived(message);
+    }
 }
 
 void SocketServer::onDisconected()

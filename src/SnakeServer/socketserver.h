@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QTcpServer>
 #include <QTcpSocket>
+#include <set>
 
 /**
  * @brief The SocketServer provides a TCP-based server.
@@ -26,12 +27,19 @@ public:
      */
     void sendMessageToClient(QByteArray message, qint16 clientId);
 
+    /**
+     * @brief Sends message to multiple clients
+     * @param message
+     * @param clients client IDs
+     */
+    void sendMessageToMultipleClients(QByteArray message, std::vector<qint16> clients);
+
 signals:
     /**
      * @brief Emitted every time a new message has received.
      * @param message
      */
-    void onNewMessageReceived(QByteArray message);
+    void newMessageReceived(QByteArray message);
 
     /**
      * @brief Emitted every time a new client connected.

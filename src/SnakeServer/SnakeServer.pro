@@ -9,7 +9,9 @@ CONFIG -= app_bundle
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+        Snake/gameengine.cpp \
         gamemanager.cpp \
+        gameroom.cpp \
         main.cpp \
         messageparser.cpp \
         socketserver.cpp
@@ -20,9 +22,12 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 HEADERS += \
+    Snake/gameengine.h \
     gamemanager.h \
+    gameroom.h \
     messageparser.h \
-    socketserver.h
+    socketserver.h \
+    utils.h
 
 win32:CONFIG(release, debug|release): LIBS += -L$$OUT_PWD/../SnakeCommon/release/ -lSnakeCommon
 else:win32:CONFIG(debug, debug|release): LIBS += -L$$OUT_PWD/../SnakeCommon/debug/ -lSnakeCommon

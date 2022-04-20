@@ -48,6 +48,13 @@ public slots:
     void onReadyRead();
 
     /**
+     * @brief Sends message to the server
+     *
+     * @param message
+     */
+    void sendMessage(QByteArray message);
+
+    /**
      * @brief Handles error when it has occurred.
      *
      * Checks error type and emits appropriate error message.

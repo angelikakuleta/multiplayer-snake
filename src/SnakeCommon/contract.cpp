@@ -1,6 +1,7 @@
 #include "contract.h"
 
 const char BREAK_CHAR = '#';
+const char END_CHAR = '$';
 
 const char* CMD_CREATE_ROOM = "CRM";
 const char* CMD_JOIN_ROOM = "JRM";
@@ -24,6 +25,8 @@ Contract::Contract()
 }
 
 const char Contract::s_breakChar = BREAK_CHAR;
+
+const char Contract::s_endChar = END_CHAR;
 
 const map<Contract::ClientCmd, const char*> Contract::s_clientCmdCodes = {
     { ClientCmd::CreateRoom, CMD_CREATE_ROOM },

@@ -1,4 +1,5 @@
 #include "socketclient.h"
+#include <contract.h>
 
 const char* DEFAULT_ADDRESS = "127.0.0.1";
 const qint16 DEFAULT_PORT = 8080;
@@ -20,10 +21,18 @@ void SocketClient::onConnected()
 
 void SocketClient::onReadyRead()
 {
-    QByteArray message = readAll();
-    qDebug() << "Received message" << message;
+    QByteArray data = readAll();
+    for (auto &message : data.split(Contract::endChar())) {
+        if (message.size() == 0) continue;
+        qDebug() << "Received message" << message;
+        emit newMessageReceived(message);
+    }
+}
 
-    emit newMessageReceived(message);
+void SocketClient::sendMessage(QByteArray message)
+{
+    message.append(Contract::endChar());
+    write(message);
 }
 
 void SocketClient::onError(QAbstractSocket::SocketError error)
