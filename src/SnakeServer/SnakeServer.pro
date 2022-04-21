@@ -9,7 +9,11 @@ CONFIG -= app_bundle
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+        Snake/computerplayer.cpp \
+        Snake/gameboard.cpp \
         Snake/gameengine.cpp \
+        Snake/humanplayer.cpp \
+        Snake/player.cpp \
         gamemanager.cpp \
         gameroom.cpp \
         main.cpp \
@@ -22,7 +26,11 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 HEADERS += \
+    Snake/computerplayer.h \
+    Snake/gameboard.h \
     Snake/gameengine.h \
+    Snake/humanplayer.h \
+    Snake/player.h \
     gamemanager.h \
     gameroom.h \
     messageparser.h \

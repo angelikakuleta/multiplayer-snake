@@ -30,6 +30,15 @@ public:
         Right
     };
     Q_ENUM(Direction);
+
+    struct Position { int row, column; };
+
+    static uint boardRows() { return s_boardRows; }
+    static uint boardColumns() { return s_boardColumns; }
+
+private:
+    static const uint s_boardRows;
+    static const uint s_boardColumns;
 };
 
 #endif // GAME_H

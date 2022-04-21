@@ -2,7 +2,6 @@
 #define GAMEBOARD_H
 
 #include <QObject>
-#include <vector>
 #include <game.h>
 
 using Tile = Game::Tile;
@@ -12,25 +11,25 @@ class GameBoard : public QObject
 {
     Q_OBJECT
 public:
-
     explicit GameBoard(QObject *parent = nullptr);
 
     uint rows() const { return m_rows; }
     uint columns() const { return m_columns; }
-    const std::vector<Tile> *tiles() const { return &m_tiles; }
-    Tile tiles(const Position &pos) const;
-    void setTile(const Position &pos, Tile tile);
-    void clear();
 
-signals:
-    void dataChanged(const Position &from, const Position &to);
+    void clear();
+    void generateFood();
+    Position generatePlayer(const Tile &tile);
+
+    const Tile &tile(const Position &pos) const;
+    void setTile(const Position &pos, const Tile &tile);
+
+    const std::vector<Tile> &tiles() const { return m_tiles; }
 
 private:
     const uint m_rows;
     const uint m_columns;
     std::vector<Tile> m_tiles;
-
-    int posToIndex(const Position &pos) const;
+    uint m_food;
 };
 
 #endif // GAMEBOARD_H

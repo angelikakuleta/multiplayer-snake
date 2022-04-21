@@ -32,7 +32,6 @@ void GameRoom::readyToPlay(qint16 clientId)
 {
     if (utils::contain(m_clients, clientId)) {
         m_readyList[clientId] = true;
-        m_game->addPlayer(clientId);
     }
 }
 
@@ -41,6 +40,11 @@ void GameRoom::startGame()
     for (auto &clientId : m_clients)
         if (m_readyList[clientId] == false) return;
 
+    Tile tile = Tile::Snake1;
+    for (auto &clientId : m_clients) {
+        m_game->addPlayer(clientId, tile);
+        tile = static_cast<Tile>(static_cast<int>(tile)+1);
+    }
     m_game->startGame();
 }
 

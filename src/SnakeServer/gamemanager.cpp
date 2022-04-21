@@ -104,7 +104,7 @@ void GameManager::startGameRequest(qint16 clientId, qint16 roomId)
     roomListUpdated();
 }
 
-void GameManager::changeDirectionRequest(qint16 clientId, qint16 roomId, GameEngine::Direction direction)
+void GameManager::changeDirectionRequest(qint16 clientId, qint16 roomId, Game::Direction direction)
 {
     if (m_rooms.find(roomId) == m_rooms.end()) return;
     m_rooms[roomId]->game()->changeDirection(clientId, direction);
@@ -173,7 +173,7 @@ void GameManager::onNewMessageReceived(QByteArray message)
         break;
     case ClientCmd::ChangeDirection:
         params.pop_back();
-        GameEngine::Direction direction = (GameEngine::Direction)params.first().toInt(&isValid);
+        Game::Direction direction = (Game::Direction)params.first().toInt(&isValid);
         if (!isValid) return;
         changeDirectionRequest(clientId, roomId, direction);
         break;

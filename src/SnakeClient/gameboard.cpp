@@ -1,21 +1,18 @@
 #include "gameboard.h"
 #include <QDebug>
 
-const int BOARD_ROWS = 32;
-const int BOARD_COLUMNS = 40;
-
 GameBoard::GameBoard(QObject *parent)
     : QObject{parent}
-    , m_rows(BOARD_ROWS)
-    , m_columns(BOARD_COLUMNS)
+    , m_rows(Game::boardRows())
+    , m_columns(Game::boardColumns())
     , m_tiles(m_rows*m_columns, Tile::Empty)
 {
     // to remove
     m_tiles.at(0) = Tile::Snake1;
-    m_tiles.at(BOARD_ROWS * BOARD_COLUMNS / 3) = Tile::Food;
+    m_tiles.at(m_rows * m_columns / 3) = Tile::Food;
 }
 
-Tile GameBoard::tiles(const Pos &pos) const
+Tile GameBoard::tiles(const Position &pos) const
 {
     try {
         return m_tiles.at(posToIndex(pos));
@@ -24,7 +21,7 @@ Tile GameBoard::tiles(const Pos &pos) const
     }
 }
 
-void GameBoard::setTile(const Pos &pos, Tile tile)
+void GameBoard::setTile(const Position &pos, Tile tile)
 {
     try {
         m_tiles.at(posToIndex(pos)) = tile;
@@ -40,10 +37,10 @@ void GameBoard::clear()
         m_tiles.at(i) = Tile::Empty;
     }
 
-    emit dataChanged({0,0}, {m_rows - 1, m_columns - 1});
+    emit dataChanged({0,0}, {(int)m_rows - 1, (int)m_columns - 1});
 }
 
-int GameBoard::posToIndex(const Pos &pos) const
+int GameBoard::posToIndex(const Position &pos) const
 {
     return pos.row * m_columns + pos.column;
 }

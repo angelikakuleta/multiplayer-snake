@@ -30,10 +30,7 @@ QVariant GameBoardVM::data(const QModelIndex &index, int role) const
     if (role != Qt::DisplayRole)
         return QVariant();
 
-    return QVariant::fromValue(m_board->tiles({
-                static_cast<uint>(index.row()),
-                static_cast<uint>(index.column())
-                                              }));
+    return QVariant::fromValue(m_board->tiles({index.row(), index.column()}));
 }
 
 void GameBoardVM::setBoard(const GameBoard *newBoard)
@@ -45,7 +42,7 @@ void GameBoardVM::setBoard(const GameBoard *newBoard)
 
     m_board = newBoard;
 
-    connect(m_board, &GameBoard::dataChanged, this, [=](const GameBoard::Pos &from, const GameBoard::Pos &to){
+    connect(m_board, &GameBoard::dataChanged, this, [=](const Game::Position &from, const Game::Position &to){
         emit dataChanged(createIndex(from.row, from.column), createIndex(to.row, to.column), {Qt::DisplayRole});
     });
 
