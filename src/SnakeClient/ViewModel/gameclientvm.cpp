@@ -40,3 +40,8 @@ void GameClientVM::startGame()
 {
     m_clientManager.startGameRequest();
 }
+
+void GameClientVM::changeDirection(Direction direction)
+{
+    m_clientManager.changeDirectionRequest(direction);
+}

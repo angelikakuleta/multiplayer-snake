@@ -19,7 +19,9 @@ public:
     uint columns() const { return m_columns; }
     const std::vector<Tile> *tiles() const { return &m_tiles; }
     Tile tiles(const Position &pos) const;
+    Tile tiles(int index) const;
     void setTile(const Position &pos, Tile tile);
+    void setTile(int index, Tile tile);
     void clear();
 
 signals:
@@ -31,6 +33,7 @@ private:
     std::vector<Tile> m_tiles;
 
     int posToIndex(const Position &pos) const;
+    Position indexToPos(uint index) const;
 };
 
 #endif // GAMEBOARD_H

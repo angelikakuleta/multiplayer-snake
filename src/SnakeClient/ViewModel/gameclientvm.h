@@ -36,6 +36,7 @@ public:
     Q_INVOKABLE void leaveRoom();
     Q_INVOKABLE void readyToPlay();
     Q_INVOKABLE void startGame();
+    Q_INVOKABLE void changeDirection(Direction direction);
 
     qint16 clientId() const { return m_clientManager.client()->clientId(); }
     qint16 roomId() const { return m_clientManager.roomId(); }

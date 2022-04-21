@@ -9,16 +9,20 @@ Item {
     focus: true
     Keys.onPressed: (event) => {
         switch (event.key) {
-            case Qt.Key_Up:
+            case Qt.Key_Up:  
+                GameClient.changeDirection(Direction.Up);
                 console.log("Key Up was pressed")
                 break;
             case Qt.Key_Down:
+                GameClient.changeDirection(Direction.Down);
                 console.log("Key Down was pressed")
                 break;
             case Qt.Key_Left:
+                GameClient.changeDirection(Direction.Left);
                 console.log("Key Left was pressed")
                 break;
             case Qt.Key_Right:
+                GameClient.changeDirection(Direction.Right);
                 console.log("Key Right was pressed")
                 break;
             default:
@@ -102,6 +106,7 @@ Item {
                 this.isClicked = true;
                 readyButton.buttonColor = "#3F3F46"
                 GameClient.readyToPlay();
+                GameClient.startGame();
             }
         }
     }

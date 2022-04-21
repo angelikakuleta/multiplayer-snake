@@ -30,6 +30,7 @@ public slots:
     void onClientConnected(qint16 clientId);
     void onClientDisconnected(qint16 clientId);
     void onNewMessageReceived(QByteArray message);
+    void onTick(qint16 gameId, std::vector<Tile> tiles);
 
 private:
     SocketServer* m_socketServer;

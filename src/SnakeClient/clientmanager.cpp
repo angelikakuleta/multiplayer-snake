@@ -72,6 +72,15 @@ void ClientManager::startGameRequest()
     m_client->sendMessage(message);
 }
 
+void ClientManager::changeDirectionRequest(Direction direction)
+{
+    QList<QByteArray> params;
+    params.append(QByteArray::number(m_roomId));
+    params.append(QByteArray::number(direction));
+    auto message = m_messageParser->buildMessage(ClientCmd::ChangeDirection, m_client->clientId(), params);
+    m_client->sendMessage(message);
+}
+
 void ClientManager::onNewMessageReceived(QByteArray message)
 {
     Contract::ServerCmd cmd;
@@ -149,8 +158,20 @@ void ClientManager::onNewMessageReceived(QByteArray message)
         emit playersChanged();
         break;
     }
-    case ServerCmd::GameTick:
+    case ServerCmd::GameTick: {
+        if (params.length() == 0) return;
+        std::vector<Tile> tiles;
+        qint16 temp;
+        for (auto &client : params.first().split(',')) {
+            temp = client.toInt(&isValid);
+            if (isValid) tiles.push_back(static_cast<Tile>(temp));
+        }
+
+        for (size_t i=0; i < tiles.size(); ++i)
+            m_board->setTile(i, tiles[i]);
+
         break;
+    }
     case ServerCmd::GameWinner:
         break;
     }

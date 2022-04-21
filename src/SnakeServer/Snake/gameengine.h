@@ -11,7 +11,7 @@ class GameEngine : public QObject
     Q_OBJECT
 
 public:
-    explicit GameEngine(QObject *parent = nullptr);
+    explicit GameEngine(qint16 gameId, QObject *parent = nullptr);
 
     static ushort maxPlayers() { return s_maxPlayers; }
     bool isRunning() const { return m_isRunning; };
@@ -25,7 +25,7 @@ public:
     qint16 checkWinner();
 
 signals:
-    void tick(std::vector<Tile> tiles);
+    void tick(qint16 gameId, std::vector<Tile> tiles);
 
 private slots:
     void onLoopIteration();
@@ -33,6 +33,8 @@ private slots:
 
 private:
     static const ushort s_maxPlayers;
+
+    qint16 m_gameId;
     std::map<qint16, Player*> m_players;
     GameBoard *m_board;
     bool m_isRunning;

@@ -34,6 +34,8 @@ void GameManager::createRoomRequest(qint16 clientId)
 
     GameRoom* newGameRoom = new GameRoom(roomId, this);
     m_rooms[roomId] = newGameRoom;
+    connect(newGameRoom->game(), SIGNAL(tick(qint16,std::vector<Tile>)),
+            this, SLOT(onTick(qint16,std::vector<Tile>)));
 
     QList<QByteArray> params;
     params.append(QByteArray::number(roomId));
@@ -98,7 +100,7 @@ void GameManager::startGameRequest(qint16 clientId, qint16 roomId)
 {
     if (m_rooms.find(roomId) == m_rooms.end()) return;
 
-    if (*m_rooms[roomId]->clients().begin() != clientId) return;
+    //if (*m_rooms[roomId]->clients().begin() != clientId) return;
     m_rooms[roomId]->startGame();
 
     roomListUpdated();
@@ -172,12 +174,22 @@ void GameManager::onNewMessageReceived(QByteArray message)
         startGameRequest(clientId, roomId);
         break;
     case ClientCmd::ChangeDirection:
-        params.pop_back();
+        params.pop_front();
         Game::Direction direction = (Game::Direction)params.first().toInt(&isValid);
         if (!isValid) return;
         changeDirectionRequest(clientId, roomId, direction);
         break;
     }
+}
+
+void GameManager::onTick(qint16 gameId, std::vector<Tile> tiles)
+{
+    if (m_rooms.find(gameId) == m_rooms.end()) return;
+    QList<QByteArray> params;
+    params.append(QByteArray::fromStdString(
+                      utils::join(tiles, ",")));
+    auto message = m_messageParser->buildMessage(ServerCmd::GameTick, params);
+    m_socketServer->sendMessageToMultipleClients(message, m_rooms[gameId]->clients());
 }
 
 void GameManager::roomListUpdated()

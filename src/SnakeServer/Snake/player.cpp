@@ -8,6 +8,8 @@ Player::Player(qint16 playerId, Tile tile, QObject *parent)
     , m_tile(tile)
     , m_score(0)
 {
+    // for test
+    m_direction = Direction::Right;
 }
 
 void Player::setDirection(const Direction &direction)

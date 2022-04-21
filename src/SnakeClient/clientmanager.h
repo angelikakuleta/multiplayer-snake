@@ -27,6 +27,7 @@ public:
     void leaveRoomRequest();
     void readyToPlayRequest();
     void startGameRequest();
+    void changeDirectionRequest(Direction direction);
 
     SocketClient *client() const { return m_client; }
     const std::list<qint16> &openRooms() const { return m_openRooms; }

@@ -7,11 +7,12 @@ const int GAME_TIME = 300000;
 
 const ushort GameEngine::s_maxPlayers = 4;
 
-GameEngine::GameEngine(QObject *parent)
+GameEngine::GameEngine(qint16 gameId, QObject *parent)
     : QObject{parent}
-    , m_board()
+    , m_gameId(gameId)
     , m_isRunning(false)
 {
+    m_board = new GameBoard();
     connect(&m_loopTimer, SIGNAL(timeout()), this, SLOT(onLoopIteration()));
 }
 
@@ -40,7 +41,7 @@ void GameEngine::startGame()
     initialize();
 
     m_loopTimer.start(GAME_SPEED);
-    QTimer::singleShot(GAME_TIME, this, SLOT(stopGame()));
+    QTimer::singleShot(GAME_TIME, this, SLOT(onStopGameRequest()));
 }
 
 void GameEngine::stopGame()
@@ -74,8 +75,10 @@ qint16 GameEngine::checkWinner()
 void GameEngine::onLoopIteration()
 {
     for (auto &player : m_players) {
-        player.second->move();
-        emit tick(m_board->tiles());
+        auto pos = player.second->move();
+
+        m_board->setTile(pos, player.second->tile());
+        emit tick(m_gameId, m_board->tiles());
     }
 }
 

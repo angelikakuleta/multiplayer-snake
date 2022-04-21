@@ -4,7 +4,7 @@ GameRoom::GameRoom(qint16 roomId, QObject *parent)
     : QObject{parent},
     m_roomId(roomId)
 {
-    m_game = new GameEngine(this);
+    m_game = new GameEngine(roomId, this);
 }
 
 GameRoom::~GameRoom()
